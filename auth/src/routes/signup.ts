@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
+import { DatabaseConnectionError } from "../errors/Database-connection-error";
+import { RequestValidationError } from "../errors/Request-validation-error";
 const route = Router();
 
 route.post(
@@ -13,9 +15,9 @@ route.post(
   (req: Request, res: Response): void => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new Error(errors.array()[0].msg);
+      throw new RequestValidationError(errors.array());
     }
-    res.send({});
+    throw new DatabaseConnectionError();
   }
 );
 
