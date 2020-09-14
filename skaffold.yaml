@@ -7,12 +7,12 @@ deploy:
 build:
   local:
     push: false
-artifacts:
-  - image: kevinmitaki/fms-auth
-    context: auth
-    docker:
-      dockerfile: Docker
-    sync:
-      manual:
-        - src: "src/**/*.ts"
-          dest: .
+  artifacts:
+    - image: kevinmitaki/fms-auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .

@@ -10,11 +10,11 @@ spec:
   template:
     metadata:
       labels:
-      app: auth
+        app: auth
     spec:
       containers:
-        name: auth
-        image: kevinmitaki/fms-auth
+        - name: auth
+          image: kevinmitaki/fms-auth
 ---
 apiVersion: v1
 kind: Service
