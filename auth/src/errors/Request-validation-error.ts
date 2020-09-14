@@ -1,7 +1,7 @@
 import { ValidationError } from "express-validator";
 import { CustomError } from "./CustomError";
 
-interface errorResult {
+export interface ErrorResult {
   message: string;
   field?: string;
 }
@@ -14,7 +14,7 @@ export class RequestValidationError extends CustomError {
   }
   serializeErrors() {
     return this.errors.map(
-      (err: ValidationError): errorResult => ({
+      (err: ValidationError): ErrorResult => ({
         message: err.msg,
         field: err.param
       })
