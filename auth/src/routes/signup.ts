@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import { BadRequestError } from "../errors/BadRequestError";
-import { DatabaseConnectionError } from "../errors/Database-connection-error";
 import { RequestValidationError } from "../errors/Request-validation-error";
 import { User } from "../models/User";
+import { Password } from "../services/Password";
 const route = Router();
 
 interface SignUp {
@@ -20,25 +20,22 @@ route.post(
       .withMessage("password must have 6 characters minimum and 20 maximum")
   ],
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
-      }
-      const { email, password } = req.body as SignUp;
-      const userExists = await User.findOne({ email });
-      if (userExists) {
-        throw new BadRequestError("A user with that email already exists");
-      }
-
-      // HASH PASSWORD
-
-      const user = User.build({ email, password });
-      await user.save();
-      res.status(201).send(user);
-    } catch (error) {
-      throw new DatabaseConnectionError();
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new RequestValidationError(errors.array());
     }
+    const { email, password } = req.body as SignUp;
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      throw new BadRequestError("A user with that email already exists");
+    }
+
+    // HASH PASSWORD
+    const hashedPassword = await Password.toHash(password);
+    console.log(User.build);
+    const user = User.build({ email, password: hashedPassword });
+    await user.save();
+    res.status(201).send(user);
   }
 );
 

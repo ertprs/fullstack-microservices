@@ -28,10 +28,9 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model<UserDoc, UserModel>("User", UserSchema);
-
 UserSchema.statics.build = (attrs: UserAttrs): mongoose.Document => {
   return new User(attrs);
 };
+const User = mongoose.model<UserDoc, UserModel>("User", UserSchema);
 
 export { User };
