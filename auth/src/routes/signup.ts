@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
 import { BadRequestError } from "../errors/BadRequestError";
@@ -35,6 +36,11 @@ route.post(
     console.log(User.build);
     const user = User.build({ email, password: hashedPassword });
     await user.save();
+    const userJwt = jwt.sign({ id: user._id, email: user.email }, "asdf");
+    req.session = {
+      ...req.session,
+      jwt: userJwt
+    };
     res.status(201).send(user);
   }
 );
