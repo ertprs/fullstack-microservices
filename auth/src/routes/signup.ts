@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { body, validationResult } from "express-validator";
+import { BadRequestError } from "../errors/BadRequestError";
 import { DatabaseConnectionError } from "../errors/Database-connection-error";
 import { RequestValidationError } from "../errors/Request-validation-error";
 import { User } from "../models/User";
@@ -27,8 +28,7 @@ route.post(
       const { email, password } = req.body as SignUp;
       const userExists = await User.findOne({ email });
       if (userExists) {
-        res.send({});
-        return;
+        throw new BadRequestError("A user with that email already exists");
       }
 
       // HASH PASSWORD
