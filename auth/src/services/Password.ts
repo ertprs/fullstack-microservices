@@ -8,4 +8,12 @@ export class Password {
     const buf = (await scryptAsync(password, salt, 64)) as Buffer;
     return `${buf.toString("hex")}.${salt}`;
   };
+  static compare = async (
+    storedPassword: string,
+    suppliedPassword: string
+  ): Promise<boolean> => {
+    const [hashedPassword, salt] = storedPassword.split(".");
+    const buf = (await scryptAsync(hashedPassword, salt, 64)) as Buffer;
+    return buf.toString("hex") === suppliedPassword;
+  };
 }
