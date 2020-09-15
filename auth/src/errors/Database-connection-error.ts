@@ -7,7 +7,7 @@ export class DatabaseConnectionError extends CustomError {
     super("Error connecting to db");
     Object.setPrototypeOf(this, DatabaseConnectionError.prototype);
   }
-  serializeErrors(): ErrorResult[] {
+  serializeErrors = (): ErrorResult[] => {
     return [{ message: this.reason }];
-  }
+  };
 }

@@ -12,12 +12,12 @@ export class RequestValidationError extends CustomError {
     super("validation failed");
     Object.setPrototypeOf(this, RequestValidationError.prototype);
   }
-  serializeErrors() {
+  serializeErrors = (): ErrorResult[] => {
     return this.errors.map(
       (err: ValidationError): ErrorResult => ({
         message: err.msg,
         field: err.param
       })
     );
-  }
+  };
 }

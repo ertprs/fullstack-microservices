@@ -6,7 +6,7 @@ export class NotFound extends CustomError {
   constructor() {
     super("route not found");
   }
-  serializeErrors(): ErrorResult[] {
+  serializeErrors = (): ErrorResult[] => {
     return [{ message: "Route not found" }];
-  }
+  };
 }
