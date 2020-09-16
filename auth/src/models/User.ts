@@ -25,7 +25,17 @@ const UserSchema = new mongoose.Schema(
       required: true
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret): void {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.password;
+      }
+    }
+  }
 );
 
 UserSchema.statics.build = (attrs: UserAttrs): mongoose.Document => {

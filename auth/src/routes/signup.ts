@@ -30,13 +30,18 @@ route.post(
     if (userExists) {
       throw new BadRequestError("A user with that email already exists");
     }
-
+    if (!process.env.JWT_KEY) {
+      throw new Error("JWT_KEY MUST BE PROVIDED");
+    }
     // HASH PASSWORD
     const hashedPassword = await Password.toHash(password);
     console.log(User.build);
     const user = User.build({ email, password: hashedPassword });
     await user.save();
-    const userJwt = jwt.sign({ id: user._id, email: user.email }, "asdf");
+    const userJwt = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_KEY
+    );
     req.session = {
       ...req.session,
       jwt: userJwt
