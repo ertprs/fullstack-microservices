@@ -1,10 +1,11 @@
-import mongoose,  from "mongoose";
+import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 let mongo: MongoMemoryServer;
 
 beforeAll(
   async (): Promise<void> => {
+    process.env.JWT_KEY = "asdfasdf";
     const mongo = new MongoMemoryServer();
     const mongoUri = await mongo.getUri();
     await mongoose.connect(mongoUri, {
