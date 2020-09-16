@@ -13,7 +13,7 @@ interface SignIn {
 }
 
 route.post(
-  "/api/users/sigin",
+  "/api/users/signin",
   body("email").isEmail().withMessage("please enter a valid email"),
   body("password").trim().notEmpty().withMessage("password must not be empty"),
   async (req: Request, res: Response): Promise<void> => {
