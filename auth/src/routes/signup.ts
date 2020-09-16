@@ -5,6 +5,7 @@ import { BadRequestError } from "../errors/BadRequestError";
 import { RequestValidationError } from "../errors/Request-validation-error";
 import { User } from "../models/User";
 import { Password } from "../services/Password";
+import { validateRequest } from "../middlewares/validate-request";
 const route = Router();
 
 interface SignUp {
@@ -20,11 +21,8 @@ route.post(
       .isLength({ min: 6, max: 20 })
       .withMessage("password must have 6 characters minimum and 20 maximum")
   ],
+  validateRequest,
   async (req: Request, res: Response): Promise<void> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
     const { email, password } = req.body as SignUp;
     const userExists = await User.findOne({ email });
     if (userExists) {

@@ -5,6 +5,7 @@ import { BadRequestError } from "../errors/BadRequestError";
 import { RequestValidationError } from "../errors/Request-validation-error";
 import { User } from "../models/User";
 import { Password } from "../services/Password";
+import { validateRequest } from "../middlewares/validate-request";
 const route = Router();
 
 interface SignIn {
@@ -16,11 +17,8 @@ route.post(
   "/api/users/signin",
   body("email").isEmail().withMessage("please enter a valid email"),
   body("password").trim().notEmpty().withMessage("password must not be empty"),
+  validateRequest,
   async (req: Request, res: Response): Promise<void> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
     const { email, password } = req.body as SignIn;
     const user = await User.findOne({ email });
     if (!user) {
