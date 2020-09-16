@@ -39,7 +39,7 @@ route.post(
     const user = User.build({ email, password: hashedPassword });
     await user.save();
     const userJwt = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user.id, email: user.email },
       process.env.JWT_KEY
     );
     req.session = {
