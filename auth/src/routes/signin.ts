@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, Router } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { BadRequestError } from "../errors/BadRequestError";
-import { RequestValidationError } from "../errors/Request-validation-error";
 import { User } from "../models/User";
 import { Password } from "../services/Password";
 import { validateRequest } from "../middlewares/validate-request";
@@ -22,11 +21,11 @@ route.post(
     const { email, password } = req.body as SignIn;
     const user = await User.findOne({ email });
     if (!user) {
-      throw new BadRequestError("No user with that email");
+      throw new BadRequestError("Invalid credentials");
     }
     const isMatch = await Password.compare(user.password, password);
     if (!isMatch) {
-      throw new BadRequestError("Passwords do not match");
+      throw new BadRequestError("Invalid credentials");
     }
     const userJwt = jwt.sign(
       { id: user.id, email: user.email },
