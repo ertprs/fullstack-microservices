@@ -6,8 +6,10 @@ let mongo: MongoMemoryServer;
 beforeAll(
   async (): Promise<void> => {
     process.env.JWT_KEY = "asdfasdf";
-    const mongo = new MongoMemoryServer();
+
+    mongo = new MongoMemoryServer();
     const mongoUri = await mongo.getUri();
+    console.log({ mongoUri });
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
