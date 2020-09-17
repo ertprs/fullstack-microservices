@@ -1,5 +1,3 @@
-import buildClient from "../api/build-client";
-
 const index = ({ currentUser }) => {
   return (
     <div>
@@ -10,11 +8,6 @@ const index = ({ currentUser }) => {
       )}
     </div>
   );
-};
-
-export const getServerSideProps = async context => {
-  const { data } = await buildClient(context).get("/api/users/currentuser");
-  return { props: data };
 };
 
 export default index;
