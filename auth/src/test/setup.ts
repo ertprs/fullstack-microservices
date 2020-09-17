@@ -1,16 +1,9 @@
 import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
-
-let mongo: MongoMemoryServer;
-
 beforeAll(
   async (): Promise<void> => {
     process.env.JWT_KEY = "asdfasdf";
 
-    mongo = new MongoMemoryServer();
-    const mongoUri = await mongo.getUri();
-    console.log({ mongoUri });
-    await mongoose.connect(mongoUri, {
+    await mongoose.connect("mongodb://127.0.0.1/test_database", {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -30,7 +23,6 @@ beforeEach(
 
 afterAll(
   async (): Promise<void> => {
-    await mongo.stop();
     await mongoose.connection.close();
   }
 );
