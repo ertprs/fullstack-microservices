@@ -1,9 +1,15 @@
 import "bootstrap/dist/css/bootstrap.css";
 import buildClient from "../api/build-client";
 import axios from "axios";
+import Header from "../components/Header";
 
 const app = ({ Component, pageProps, currentUser }) => {
-  return <Component {...pageProps} currentUser={currentUser} />;
+  return (
+    <div>
+      <Header currentUser={currentUser} />
+      <Component {...pageProps} currentUser={currentUser} />;
+    </div>
+  );
 };
 
 app.getInitialProps = async appContext => {
