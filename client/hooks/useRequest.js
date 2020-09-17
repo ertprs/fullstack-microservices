@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Router from "next/router";
 import axios from "axios";
 
 const useRequest = ({ method, url, body }) => {
@@ -6,6 +7,7 @@ const useRequest = ({ method, url, body }) => {
   const doRequest = async () => {
     try {
       const response = await axios[method](url, body);
+      Router.push("/");
       return response.data;
     } catch (error) {
       setErrors(
