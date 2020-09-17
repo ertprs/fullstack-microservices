@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 const Header = ({ currentUser }) => {
+  const [signout, setSignOut] = useState(null);
   return (
     <nav className="navbar navbar-light bg-light">
       <Link href="/">
@@ -11,8 +13,14 @@ const Header = ({ currentUser }) => {
         <ul className="nav d-flex align-items-center">
           {currentUser ? (
             <span>
-              <li className="nav-item">
-                <Link href="/api/users/signout">
+              <li
+                className="nav-item"
+                onClick={async () => {
+                  await axios.post("/api/users/signout");
+                  setSignOut("signedout");
+                }}
+              >
+                <Link href="/">
                   <a className="nav-link">Sign Out</a>
                 </Link>
               </li>
