@@ -1,20 +1,12 @@
-import React from "react";
-import axios from "axios";
+import buildClient from "../api/build-client";
 
 const index = props => {
   console.log(props);
   return <div>Home page</div>;
 };
 
-export const getServerSideProps = async () => {
-  const { data } = await axios.get(
-    "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-    {
-      headers: {
-        Host: "ticketing.dev"
-      }
-    }
-  );
+export const getServerSideProps = async context => {
+  const { data } = await buildClient(context).get("/api/users/currentuser");
   return { props: data };
 };
 
