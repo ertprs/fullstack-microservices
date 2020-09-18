@@ -3,10 +3,10 @@ import { app } from "./app";
 
 const start = async (): Promise<void> => {
   try {
-    if (!process.env.JWT_KEY) {
-      throw new Error("JWT_KEY MUST BE PROVIDED");
+    if (!process.env.JWT_KEY || !process.env.MONGO_URI) {
+      throw new Error("ENV VARIABLES MUST BE PROVIDED");
     }
-    await mongoose.connect("mongodb://auth-mongo-srv:27017/auth", {
+    await mongoose.connect(process.env.MONGO_URI, {
       useCreateIndex: true,
       useFindAndModify: false,
       useNewUrlParser: true,
