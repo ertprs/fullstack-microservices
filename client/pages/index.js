@@ -1,6 +1,9 @@
-const index = ({ currentUser }) => {
+import withAuth from "../components/withAuth";
+
+const index = ({ currentUser, name }) => {
   return (
     <div>
+      {name}
       {currentUser ? (
         <h1>You are signed in</h1>
       ) : (
@@ -10,4 +13,4 @@ const index = ({ currentUser }) => {
   );
 };
 
-export default index;
+export default withAuth(index);

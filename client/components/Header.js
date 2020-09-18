@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import Router from "next/router";
 
 const Header = ({ currentUser }) => {
   const [signout, setSignOut] = useState(null);
@@ -18,6 +19,7 @@ const Header = ({ currentUser }) => {
                 onClick={async () => {
                   await axios.post("/api/users/signout");
                   setSignOut("signedout");
+                  Router.replace("/auth/signin");
                 }}
               >
                 <Link href="/">
