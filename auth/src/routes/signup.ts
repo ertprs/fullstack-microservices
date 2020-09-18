@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
-import { BadRequestError } from "../errors/BadRequestError";
 import { User } from "../models/User";
 import { Password } from "../services/Password";
-import { validateRequest } from "../middlewares/validate-request";
+import { BadRequestError, validateRequest } from "@kmtickets/common";
 const route = Router();
 
 interface SignUp {
