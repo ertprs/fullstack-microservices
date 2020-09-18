@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ticket
-          image: kevinmitaki/fmc-ticket
+          image: kevinmitaki/fms-tickets
           env:
             - name: MONGO_URI
               value: "mongodb://tickets-mongo-srv:27017/tickets"

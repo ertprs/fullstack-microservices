@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  app: tickets-mongo-depl
+  name: tickets-mongo-depl
 spec:
   replicas: 1
   selector:
@@ -13,13 +13,13 @@ spec:
         app: mongo-depl
     spec:
       containers:
-        name: mongo-depl
-        image: mongo
+        - name: mongo-depl
+          image: mongo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  app: tickets-mongo-srv
+  name: tickets-mongo-srv
 spec:
   type: ClusterIP
   selector:

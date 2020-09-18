@@ -7,7 +7,9 @@ it("has a route listening to post requests to /api/tickets", async (): Promise<
   const response = await request(app).post("/api/tickets").send({});
   expect(response.status).not.toEqual(404);
 });
-it("access if user is signed in", async (): Promise<void> => {});
+it("access if user is signed in", async (): Promise<void> => {
+  await request(app).post("/api/tickets").send({}).expect(401);
+});
 it("error if invalid title", async (): Promise<void> => {});
 it("error if invalid price", async (): Promise<void> => {});
 it("creates a ticket with valid inputs", async (): Promise<void> => {});
