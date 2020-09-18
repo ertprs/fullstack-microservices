@@ -1,9 +1,8 @@
 import React from "react";
 import Router from "next/router";
 
-let receivedProps;
-
 const withAuth = Component => {
+  let receivedProps;
   const newComponent = props => {
     receivedProps = props;
     if (typeof window !== "undefined" && !props.currentUser) {
@@ -13,6 +12,7 @@ const withAuth = Component => {
     return <Component {...props} />;
   };
   newComponent.getInitialProps = async ctx => {
+    console.log(receivedProps);
     if (
       typeof window === "undefined" &&
       receivedProps &&
@@ -21,9 +21,7 @@ const withAuth = Component => {
       ctx.res.writeHead(302, { Location: "/auth/signin" });
       ctx.res.end();
     }
-    const componentProps =
-      Component.getInitialProps && (await Component.getInitialProps(ctx));
-    return { ...componentProps };
+    return {};
   };
   return newComponent;
 };
