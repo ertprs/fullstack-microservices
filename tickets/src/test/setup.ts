@@ -22,11 +22,11 @@ beforeEach(
   }
 );
 
-// afterAll(
-//   async (): Promise<void> => {
-//     await mongoose.connection.close();
-//   }
-// );
+afterAll(
+  async (): Promise<void> => {
+    await mongoose.connection.close();
+  }
+);
 
 export const signin = (): string[] => {
   const payload = {
