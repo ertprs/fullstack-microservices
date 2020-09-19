@@ -6,6 +6,7 @@ import { errorHandler, NotFound } from "@kmtickets/common";
 import { newRoute } from "./routes/new";
 import { showRoute } from "./routes/show";
 import { indexRouter } from "./routes";
+import { updateRoute } from "./routes/update";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(
 app.use(newRoute);
 app.use(showRoute);
 app.use(indexRouter);
+app.use(updateRoute);
 
 // NOT FOUND ROUTE
 app.all(
