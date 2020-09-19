@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { signin } from "../../test/setup";
 
-const genTickets = async (): Promise<request.Test> => {
+export const genTickets = async (): Promise<request.Test> => {
   return await request(app)
     .post("/api/tickets")
     .set("Cookie", signin())
