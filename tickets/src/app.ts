@@ -5,6 +5,7 @@ import cookieSession from "cookie-session";
 import { errorHandler, NotFound } from "@kmtickets/common";
 import { newRoute } from "./routes/new";
 import { showRoute } from "./routes/show";
+import { indexRouter } from "./routes";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(
 
 app.use(newRoute);
 app.use(showRoute);
+app.use(indexRouter);
 
 // NOT FOUND ROUTE
 app.all(
