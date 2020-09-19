@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFound } from "@kmtickets/common";
 import { newRoute } from "./routes/new";
+import { showRoute } from "./routes/show";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(
 );
 
 app.use(newRoute);
+app.use(showRoute);
 
 // NOT FOUND ROUTE
 app.all(
