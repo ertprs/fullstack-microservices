@@ -30,7 +30,7 @@ afterAll(
 
 export const signin = (): string[] => {
   const payload = {
-    id: "lshdlkjfsk",
+    id: new mongoose.Types.ObjectId(),
     email: "test@test.com"
   };
   const token = jwt.sign(payload, process.env.JWT_KEY!);
