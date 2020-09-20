@@ -5,7 +5,11 @@ const stan = nats.connect("ticketing", randomBytes(4).toString("hex"), {
   url: "http://localhost:4222"
 });
 
-const options = stan.subscriptionOptions().setManualAckMode(true);
+const options = stan
+  .subscriptionOptions()
+  .setManualAckMode(true)
+  .setDeliverAllAvailable()
+  .setDurableName("accounting-service");
 
 stan.on("connect", (): void => {
   stan.on("close", () => {
