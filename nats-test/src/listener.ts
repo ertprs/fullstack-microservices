@@ -5,30 +5,12 @@ const stan = nats.connect("ticketing", randomBytes(4).toString("hex"), {
   url: "http://localhost:4222"
 });
 
-const options = stan
-  .subscriptionOptions()
-  .setManualAckMode(true)
-  .setDeliverAllAvailable()
-  .setDurableName("accounting-service");
-
 stan.on("connect", (): void => {
   stan.on("close", () => {
     console.log("NATS connection closed");
     process.exit();
   });
-  console.log("listener connected to NATS");
-  const subscription = stan.subscribe(
-    "ticket:created",
-    "order-service-queue-group",
-    options
-  );
-  subscription.on("message", (msg: Message): void => {
-    const data = msg.getData();
-    if (typeof data === "string") {
-      console.log(`received event: ${msg.getSequence()}, with data: ${data}`);
-    }
-    msg.ack();
-  });
+  new TicketCreatedListener(stan).listen();
 });
 
 process.on("SIGINT", () => stan.close());
@@ -39,7 +21,10 @@ abstract class Listener {
   abstract queueGroupName: string;
   private client: Stan;
   protected ackWait: number = 5 * 1000;
-  abstract onMessage(data: { [key: string]: string }, msg: Message): void;
+  protected abstract onMessage(
+    data: { [key: string]: string },
+    msg: Message
+  ): void;
   constructor(client: Stan) {
     this.client = client;
   }
@@ -70,5 +55,14 @@ abstract class Listener {
     return typeof data === "string"
       ? JSON.parse(data)
       : JSON.parse(data.toString("utf-8"));
+  }
+}
+
+class TicketCreatedListener extends Listener {
+  subject = "ticket:created";
+  queueGroupName = "payments-service";
+  protected onMessage(data: { [key: string]: string }, msg: Message) {
+    console.log("Event data:", data);
+    msg.ack();
   }
 }
