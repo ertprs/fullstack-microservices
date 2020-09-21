@@ -1,7 +1,14 @@
-import { auth, NotAuthorizedError, NotFound, validateRequest } from "@kmtickets/common";
+import {
+  auth,
+  NotAuthorizedError,
+  NotFound,
+  validateRequest
+} from "@kmtickets/common";
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
+import { TicketUpdatedPublisher } from "../events/publishers/ticketUpdatedPublisher";
 import { Ticket } from "../models/ticket";
+import { natsWrapper } from "../NatsWrapper";
 
 const route = Router();
 
@@ -18,16 +25,22 @@ route.put(
   validateRequest,
   async (req: Request, res: Response): Promise<void> => {
     const { title, price } = req.body as Body;
-    const ticket = await Ticket.findById(req.params.id, );
+    const ticket = await Ticket.findById(req.params.id);
     if (!ticket) {
       throw new NotFound();
     }
-    if(ticket.userId!==req.currentUser?.id){
-        throw new NotAuthorizedError()
+    if (ticket.userId !== req.currentUser?.id) {
+      throw new NotAuthorizedError();
     }
-    ticket.title=title
-    ticket.price=price
-    await ticket.save()
+    ticket.title = title;
+    ticket.price = price;
+    await ticket.save();
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    });
     res.send(ticket);
   }
 );
