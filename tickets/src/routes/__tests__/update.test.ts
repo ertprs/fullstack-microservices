@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
 import { signin } from "../../test/setup";
-import { genTickets } from "./index.test";
 
 it("returns a 404 if provided id doesnot exist", async (): Promise<void> => {
   await request(app)
