@@ -12,6 +12,12 @@ const start = async (): Promise<void> => {
       "lksdjlkjfds",
       "http://nats-srv:4222"
     );
+    natsWrapper.client.on("close", (): void => {
+      console.log("NATS connection closed");
+      process.exit();
+    });
+    process.on("SIGINT", (): void => natsWrapper.client.close());
+    process.on("SIGTERM", (): void => natsWrapper.client.close());
     await mongoose.connect(process.env.MONGO_URI, {
       useCreateIndex: true,
       useFindAndModify: false,
