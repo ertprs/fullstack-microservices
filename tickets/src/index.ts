@@ -7,10 +7,22 @@ const start = async (): Promise<void> => {
     if (!process.env.JWT_KEY || !process.env.MONGO_URI) {
       throw new Error("JWT_KEY MUST BE PROVIDED");
     }
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI MUST BE PROVIDED");
+    }
+    if (!process.env.NATS_CLUSTER_ID) {
+      throw new Error("MONGO_URI MUST BE PROVIDED");
+    }
+    if (!process.env.NATS_URL) {
+      throw new Error("MONGO_URI MUST BE PROVIDED");
+    }
+    if (!process.env.NATS_CLIENT_ID) {
+      throw new Error("MONGO_URI MUST BE PROVIDED");
+    }
     await natsWrapper.connect(
-      "ticketing",
-      "lksdjlkjfds",
-      "http://nats-srv:4222"
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
     );
     natsWrapper.client.on("close", (): void => {
       console.log("NATS connection closed");
