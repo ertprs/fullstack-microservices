@@ -25,7 +25,7 @@ spec:
   selector:
     app: mongo-depl
   ports:
-    - name: mongo-depl
+    - name: db
       protocol: TCP
       port: 27017
       targetPort: 27017

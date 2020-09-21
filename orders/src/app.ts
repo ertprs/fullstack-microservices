@@ -3,6 +3,10 @@ import "express-async-errors";
 import bodyParser from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFound } from "@kmtickets/common";
+import { indexRoute } from "./routes";
+import { deleteRoute } from "./routes/delete";
+import { newRoute } from "./routes/new";
+import { showRoute } from "./routes/show";
 
 const app = express();
 
@@ -16,6 +20,11 @@ app.use(
     sameSite: true
   })
 );
+
+app.use(indexRoute);
+app.use(deleteRoute);
+app.use(newRoute);
+app.use(showRoute);
 
 // NOT FOUND ROUTE
 app.all(
