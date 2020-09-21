@@ -14,6 +14,7 @@ beforeAll(
 jest.mock("../NatsWrapper.ts");
 beforeEach(
   async (): Promise<void> => {
+    jest.clearAllMocks();
     const collections = await mongoose.connection.db.collections();
     collections.forEach(
       async (collection): Promise<void> => {
