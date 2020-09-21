@@ -1,5 +1,5 @@
 import { Publisher, Subjects, TicketCreatedEvent } from "@kmtickets/common";
 
 export class TicketCreatedPublisher extends Publisher<TicketCreatedEvent> {
-  subject: Subjects.TicketCreated = Subjects.TicketCreated;
+  protected subject: Subjects.TicketCreated = Subjects.TicketCreated;
 }
