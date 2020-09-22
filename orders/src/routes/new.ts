@@ -50,7 +50,7 @@ route.post(
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
       userId: order.userId,
-      expiresAt: order.expiresAt.toString(),
+      expiresAt: order.expiresAt.toISOString(),
       status: order.status,
       ticket: {
         id: order.ticket.id,

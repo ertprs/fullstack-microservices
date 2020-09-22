@@ -5,6 +5,7 @@ import { signin } from "../../test/setup";
 import { Order } from "../../models/order";
 import { Ticket } from "../../models/ticket";
 import { OrderStatus } from "@kmtickets/common";
+import { natsWrapper } from "../../NatsWrapper";
 
 it("should return an error if ticket doesnot exist", async (): Promise<
   void
@@ -44,4 +45,14 @@ it("should reserve a ticket", async (): Promise<void> => {
     .expect(201);
 });
 
-it.todo("Emits a order created event");
+it("Emits a order created event", async (): Promise<void> => {
+  const ticket = Ticket.build({ title: "new ticket", price: 123 });
+  await ticket.save();
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
