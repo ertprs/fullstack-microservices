@@ -24,12 +24,12 @@ it("should fetch specific user orders", async (): Promise<void> => {
     .set("Cookie", userOne)
     .send({ ticketId: ticketOne._id })
     .expect(201);
-  await request(app)
+  const { body: OrderOne } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
     .send({ ticketId: ticketTwo._id })
     .expect(201);
-  await request(app)
+  const { body: OrderTwo } = await request(app)
     .post("/api/orders")
     .set("Cookie", userTwo)
     .send({ ticketId: ticketThree._id })
@@ -39,7 +39,6 @@ it("should fetch specific user orders", async (): Promise<void> => {
     .get("/api/orders")
     .set("Cookie", userTwo)
     .expect(200);
-  console.log(res.body[0].ticket.id);
-  expect(res.body[0].ticket.id).toEqual(ticketTwo._id);
-  expect(res.body[1].ticket.id).toEqual(ticketThree._id);
+  expect(res.body[0].id).toEqual(OrderOne.id);
+  expect(res.body[1].id).toEqual(OrderTwo.id);
 });
