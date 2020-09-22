@@ -4,8 +4,8 @@ import { Order } from "../models/order";
 
 const route = Router();
 
-route.post(
-  "/api/posts/:orderId",
+route.get(
+  "/api/orders/:orderId",
   auth,
   async (req: Request, res: Response): Promise<void> => {
     const order = await Order.findById(req.params.orderId);
