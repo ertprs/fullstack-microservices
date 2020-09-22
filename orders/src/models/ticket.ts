@@ -1,4 +1,6 @@
+import { OrderStatus } from "@kmtickets/common";
 import mongoose from "mongoose";
+import { Order } from "./order";
 
 interface TicketAttrs {
   title: string;
@@ -8,6 +10,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -38,6 +41,20 @@ const TicketSchema = new mongoose.Schema(
 
 TicketSchema.statics.build = (attrs: TicketAttrs): TicketDoc => {
   return new Ticket(attrs);
+};
+
+TicketSchema.methods.isReserved = async function (): Promise<boolean> {
+  const existingOrder = await Order.findOne({
+    ticket: this,
+    status: {
+      $in: [
+        OrderStatus.Created,
+        OrderStatus.Complete,
+        OrderStatus.AwaitingPayment
+      ]
+    }
+  });
+  return !!existingOrder;
 };
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", TicketSchema);
