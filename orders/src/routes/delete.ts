@@ -5,7 +5,9 @@ import {
   OrderStatus
 } from "@kmtickets/common";
 import { Request, Response, Router } from "express";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
 import { Order } from "../models/order";
+import { natsWrapper } from "../NatsWrapper";
 
 const route = Router();
 
@@ -22,6 +24,14 @@ route.delete(
     }
     order.status = OrderStatus.Cancelled;
     await order.save();
+
+    // EMIT AN ORDER CANCELLED EVENT
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id
+      }
+    });
 
     res.send(order);
   }
