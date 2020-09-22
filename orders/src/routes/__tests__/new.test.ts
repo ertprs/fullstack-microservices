@@ -43,3 +43,5 @@ it("should reserve a ticket", async (): Promise<void> => {
     .send({ ticketId: ticket.id })
     .expect(201);
 });
+
+it.todo("Emits a order created event");

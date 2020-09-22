@@ -7,7 +7,9 @@ route.get(
   "/api/orders",
   auth,
   async (req: Request, res: Response): Promise<void> => {
-    const orders = await Order.find({ userId: req.currentUser?.id });
+    const orders = await Order.find({ userId: req.currentUser?.id }).populate(
+      "ticket"
+    );
     res.send(orders);
   }
 );
