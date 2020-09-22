@@ -3,7 +3,7 @@ import { Subjects } from "./subjects";
 
 interface Event {
   subject: Subjects;
-  data: { [key: string]: string | number | { [key: string]: string } };
+  data: { [key: string]: string | number | { [key: string]: string | number } };
 }
 
 export abstract class Publisher<T extends Event> {
