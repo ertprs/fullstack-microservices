@@ -16,7 +16,7 @@ const route = Router();
 const EXPIRATION_WINDOW_SECONDS = 60 * 15;
 
 route.post(
-  "/api/post",
+  "/api/orders",
   auth,
   body("ticketId")
     .trim()

@@ -26,7 +26,7 @@ beforeEach(
 
 afterAll(
   async (): Promise<void> => {
-    await mongoose.connection.close();
+    // await mongoose.connection.close();
   }
 );
 
