@@ -1,5 +1,6 @@
 import {
   auth,
+  BadRequestError,
   NotAuthorizedError,
   NotFound,
   validateRequest
@@ -31,6 +32,9 @@ route.put(
     }
     if (ticket.userId !== req.currentUser?.id) {
       throw new NotAuthorizedError();
+    }
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot update an already reserved ticket");
     }
     ticket.title = title;
     ticket.price = price;

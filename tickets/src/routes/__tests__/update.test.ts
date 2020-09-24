@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
+import { Ticket } from "../../models/ticket";
 import { natsWrapper } from "../../NatsWrapper";
 import { signin } from "../../test/setup";
 
@@ -86,4 +87,22 @@ it("should publish an event", async (): Promise<void> => {
     .expect(200);
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+it("should reject updates to an already reserved ticket", async (): Promise<
+  void
+> => {
+  const signIn = signin();
+  const res = await request(app)
+    .post("/api/tickets")
+    .set("Cookie", signIn)
+    .send({ title: "jsldhkjfshjk", price: 1232 })
+    .expect(201);
+  const ticket = await Ticket.findById(res.body.id);
+  ticket!.orderId = mongoose.Types.ObjectId().toHexString();
+  await ticket?.save();
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set("Cookie", signIn)
+    .send({ price: 1232, title: "ljsdhl" })
+    .expect(401);
 });
