@@ -37,3 +37,16 @@ const setup = async (): Promise<{
   };
   return { listener, ticket, data, message };
 };
+
+it("should set the order id on the ticket", async (): Promise<void> => {
+  const { listener, ticket, data, message } = await setup();
+  await listener.onMessage(data, message);
+  const updatedTicket = await Ticket.findById(ticket.id);
+  expect(updatedTicket?.orderId).toEqual(data.id);
+});
+
+it("should ack the message", async (): Promise<void> => {
+  const { listener, data, message } = await setup();
+  await listener.onMessage(data, message);
+  expect(message.ack).toHaveBeenCalled();
+});
