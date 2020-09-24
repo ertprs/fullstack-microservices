@@ -1,9 +1,18 @@
 import { Listener, OrderCreatedEvent, Subjects } from "@kmtickets/common";
 import { Message } from "node-nats-streaming";
+import { Ticket } from "../../models/ticket";
 import { queueGroupName } from "./queueGroupName";
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   protected subject: Subjects.OrderCreated = Subjects.OrderCreated;
   protected queueGroupName: string = queueGroupName;
-  onMessage(data: OrderCreatedEvent["data"], msg: Message) {}
+  async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+    const ticket = await Ticket.findById(data.ticket.id);
+    if (!ticket) {
+      throw new Error("ticket not found");
+    }
+    ticket.orderId = data.id;
+    await ticket.save();
+    msg.ack();
+  }
 }
