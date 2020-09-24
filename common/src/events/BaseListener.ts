@@ -9,7 +9,7 @@ interface Event {
 export abstract class Listener<T extends Event> {
   protected abstract subject: T["subject"];
   protected abstract queueGroupName: string;
-  private client: Stan;
+  protected client: Stan;
   protected ackWait: number = 5 * 1000;
   protected abstract onMessage(data: T["data"], msg: Message): void;
   constructor(client: Stan) {
