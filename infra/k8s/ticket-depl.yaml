@@ -38,8 +38,8 @@ kind: Service
 metadata:
   name: ticket-srv
 spec:
+  type: ClusterIP
   selector:
-    type: ClusterIP
     app: ticket
   ports:
     - name: ticket
