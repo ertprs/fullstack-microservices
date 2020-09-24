@@ -38,3 +38,21 @@ const setup = async (): Promise<{
     ticket
   };
 };
+
+it("should update a ticket", async (): Promise<void> => {
+  const { listener, data, msg, ticket } = await setup();
+  await listener.onMessage(data, msg);
+  const updatedTicket = await Ticket.findById(data.ticket.id);
+  expect(updatedTicket?.orderId).toBeUndefined();
+});
+
+it("should publish an event", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+it("should ack the message", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(msg.ack).toHaveBeenCalled();
+});
