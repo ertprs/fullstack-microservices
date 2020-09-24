@@ -50,3 +50,9 @@ it("should ack the message", async (): Promise<void> => {
   await listener.onMessage(data, message);
   expect(message.ack).toHaveBeenCalled();
 });
+
+it("should publish a ticket updated event", async (): Promise<void> => {
+  const { listener, data, message } = await setup();
+  await listener.onMessage(data, message);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
