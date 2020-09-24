@@ -51,6 +51,7 @@ route.post(
       id: order.id,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
+      version: order.version,
       status: order.status,
       ticket: {
         id: order.ticket.id,
