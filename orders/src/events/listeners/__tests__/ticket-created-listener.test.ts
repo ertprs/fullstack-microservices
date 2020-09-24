@@ -16,7 +16,8 @@ const setup = async (): Promise<{
     id: mongoose.Types.ObjectId().toHexString(),
     userId: mongoose.Types.ObjectId().toHexString(),
     title: "concert",
-    price: 123
+    price: 123,
+    version: 0
   };
 
   //@ts-ignore
@@ -34,4 +35,10 @@ it("should create and save a ticket", async (): Promise<void> => {
   expect(ticket).toBeDefined();
   expect(ticket!.title).toBe(data.title);
   expect(ticket!.price).toBe(data.price);
+});
+
+it("should expect ack to have been called", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(msg.ack).toHaveBeenCalled();
 });
