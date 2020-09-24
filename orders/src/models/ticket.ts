@@ -6,7 +6,7 @@ import { Order } from "./order";
 interface TicketAttrs {
   title: string;
   price: number;
-  _id?: string;
+  _id: string;
 }
 
 export interface TicketDoc extends mongoose.Document {

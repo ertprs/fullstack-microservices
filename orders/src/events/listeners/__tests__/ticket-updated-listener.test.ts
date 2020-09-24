@@ -13,7 +13,11 @@ const setup = async (): Promise<{
 }> => {
   const listener = new TicketUpdatedListener(natsWrapper.client);
 
-  const ticket = Ticket.build({ price: 999, title: "concert" });
+  const ticket = Ticket.build({
+    price: 999,
+    title: "concert",
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   const data: TicketUpdatedEvent["data"] = {
     id: ticket._id,
@@ -43,4 +47,16 @@ it("should ack the message", async (): Promise<void> => {
   const { listener, data, msg } = await setup();
   await listener.onMessage(data, msg);
   expect(msg.ack).toHaveBeenCalled();
+});
+
+it("should not call ack if event has skipped version number", async (): Promise<
+  void
+> => {
+  const { listener, data, msg } = await setup();
+  data.version = 10;
+  try {
+    await listener.onMessage(data, msg);
+  } catch (error) {}
+
+  expect(msg.ack).not.toHaveBeenCalled();
 });

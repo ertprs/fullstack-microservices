@@ -2,9 +2,14 @@ import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { signin } from "../../test/setup";
+import mongoose from "mongoose";
 
 it("should fetch the order for a specific user", async (): Promise<void> => {
-  const ticket = Ticket.build({ title: "ticket", price: 123 });
+  const ticket = Ticket.build({
+    title: "ticket",
+    price: 123,
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   const user = signin();
   const res = await request(app)
@@ -21,7 +26,11 @@ it("should fetch the order for a specific user", async (): Promise<void> => {
 });
 
 it("should not fetch another users order", async (): Promise<void> => {
-  const ticket = Ticket.build({ title: "ticket", price: 123 });
+  const ticket = Ticket.build({
+    title: "ticket",
+    price: 123,
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   const user = signin();
   const res = await request(app)

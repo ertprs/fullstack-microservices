@@ -6,7 +6,11 @@ import { app } from "../../app";
 import { signin } from "../../test/setup";
 
 const createTicket = async (): Promise<TicketDoc> => {
-  const ticket = Ticket.build({ price: 133, title: "ticket" });
+  const ticket = Ticket.build({
+    price: 133,
+    title: "ticket",
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   return ticket;
 };

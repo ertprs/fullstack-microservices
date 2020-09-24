@@ -20,7 +20,11 @@ it("should return an error if ticket doesnot exist", async (): Promise<
 it("should return an error if ticket is already reserved", async (): Promise<
   void
 > => {
-  const ticket = Ticket.build({ title: "new ticket", price: 123 });
+  const ticket = Ticket.build({
+    title: "new ticket",
+    price: 123,
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   const order = Order.build({
     ticket,
@@ -36,7 +40,11 @@ it("should return an error if ticket is already reserved", async (): Promise<
   expect(res.status).toEqual(401);
 });
 it("should reserve a ticket", async (): Promise<void> => {
-  const ticket = Ticket.build({ title: "new ticket", price: 123 });
+  const ticket = Ticket.build({
+    title: "new ticket",
+    price: 123,
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   await request(app)
     .post("/api/orders")
@@ -46,7 +54,11 @@ it("should reserve a ticket", async (): Promise<void> => {
 });
 
 it("Emits a order created event", async (): Promise<void> => {
-  const ticket = Ticket.build({ title: "new ticket", price: 123 });
+  const ticket = Ticket.build({
+    title: "new ticket",
+    price: 123,
+    _id: mongoose.Types.ObjectId().toHexString()
+  });
   await ticket.save();
   await request(app)
     .post("/api/orders")
