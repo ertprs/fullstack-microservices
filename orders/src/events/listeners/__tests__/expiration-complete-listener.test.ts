@@ -36,3 +36,22 @@ const setup = async (): Promise<{
   };
   return { listener, ticket, order, data, msg };
 };
+
+it("should update the orderstatus to cancelled", async (): Promise<void> => {
+  const { listener, order, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  const updatedOrder = await Order.findById(order.id);
+  expect(updatedOrder?.status).toEqual(OrderStatus.Cancelled);
+});
+
+it("should emit an order cancelled event", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it("should ack the message", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(msg.ack).toHaveBeenCalled();
+});
