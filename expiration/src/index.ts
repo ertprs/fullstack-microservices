@@ -1,3 +1,4 @@
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 import { natsWrapper } from "./NatsWrapper";
 
 const start = async (): Promise<void> => {
@@ -22,6 +23,7 @@ const start = async (): Promise<void> => {
     });
     process.on("SIGINT", (): void => natsWrapper.client.close());
     process.on("SIGTERM", (): void => natsWrapper.client.close());
+    new OrderCreatedListener(natsWrapper.client).listen();
   } catch (error) {
     console.log(error);
   }
