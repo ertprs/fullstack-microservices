@@ -33,6 +33,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: kevinmitaki/fms-expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: kevinmitaki/fms-orders
       context: orders
       docker:
