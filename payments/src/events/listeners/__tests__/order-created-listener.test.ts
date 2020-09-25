@@ -3,6 +3,7 @@ import { natsWrapper } from "../../../NatsWrapper";
 import { OrderCreatedListener } from "../order-created-listener";
 import mongoose from "mongoose";
 import { Message } from "node-nats-streaming";
+import { Order } from "../../../models/Order";
 
 const setup = async (): Promise<{
   listener: OrderCreatedListener;
@@ -28,3 +29,15 @@ const setup = async (): Promise<{
   };
   return { listener, data, msg };
 };
+it("should replicate the order info", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  const order = await Order.findById(data.id);
+  expect(order?.price).toEqual(data.ticket.price);
+});
+
+it("should ack the message", async (): Promise<void> => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+  expect(msg.ack).toHaveBeenCalled();
+});
