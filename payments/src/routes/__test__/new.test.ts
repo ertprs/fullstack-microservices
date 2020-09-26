@@ -5,6 +5,8 @@ import { Order } from "../../models/Order";
 import { signin } from "../../test/setup";
 import { OrderStatus } from "@kmtickets/common";
 
+jest.mock("../../stripe");
+
 it("should return 404 if order doesnot exist", async (): Promise<void> => {
   await request(app)
     .post("/api/payments")
@@ -47,4 +49,24 @@ it("should return 401 if order is cancelled", async (): Promise<void> => {
       token: "lkjsdjs"
     })
     .expect(401);
+});
+
+it("should resolves a 204 with valid inputs", async (): Promise<void> => {
+  const userId = mongoose.Types.ObjectId().toHexString();
+  const order = Order.build({
+    _id: mongoose.Types.ObjectId().toHexString(),
+    price: 1232,
+    version: 0,
+    status: OrderStatus.Created,
+    userId: "1234"
+  });
+  await order.save();
+  await request(app)
+    .post("/api/payments")
+    .set("Cookie", signin(userId))
+    .send({
+      orderId: order.id,
+      token: "tok_visa"
+    })
+    .expect(201);
 });

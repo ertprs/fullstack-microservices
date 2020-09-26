@@ -32,11 +32,11 @@ route.post(
       throw new BadRequestError("cannot pay for a cancelled order");
     }
     await stripe.charges.create({
-      amount: order.price,
+      amount: order.price * 100,
       currency: "ksh",
       source: token
     });
-    res.send({ message: "Success" });
+    res.status(201).send({ message: "Success" });
   }
 );
 export { route as newRoute };
