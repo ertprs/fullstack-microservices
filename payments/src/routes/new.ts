@@ -8,7 +8,10 @@ import {
 } from "@kmtickets/common";
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
+import { PaymentCreated } from "../events/publishers/PaymentCreatedPublisher";
 import { Order } from "../models/Order";
+import { Payment } from "../models/Payments";
+import { natsWrapper } from "../NatsWrapper";
 import { stripe } from "../stripe";
 
 const route = Router();
@@ -31,12 +34,19 @@ route.post(
     if (order.status === OrderStatus.Cancelled) {
       throw new BadRequestError("cannot pay for a cancelled order");
     }
-    await stripe.charges.create({
+    const { id } = await stripe.charges.create({
       amount: order.price * 100,
       currency: "ksh",
       source: token
     });
-    res.status(201).send({ message: "Success" });
+    const payment = Payment.build({ orderId: order.id, stripeId: id });
+    await payment.save();
+    new PaymentCreated(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId
+    });
+    res.status(201).send(payment);
   }
 );
 export { route as newRoute };
