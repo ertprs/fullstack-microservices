@@ -1,18 +1,33 @@
-const index = ({ currentUser, name }) => {
+const index = ({ currentUser, tickets }) => {
   return (
-    <div>
-      {name}
-      {currentUser ? (
-        <h1>You are signed in</h1>
-      ) : (
-        <h1>You are NOT signed in</h1>
-      )}
+    <div className="container">
+      <h1>Tickets</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tickets.length !== 0 &&
+            tickets.map(ticket => {
+              return (
+                <tr key={ticket.id}>
+                  <td>{ticket.title}</td>
+                  <td>{ticket.price}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
     </div>
   );
 };
 
 index.getInitialProps = async (context, client, currentUser) => {
-  return {};
+  const { data } = await client.get("/api/tickets");
+  return { tickets: data };
 };
 
 export default index;
