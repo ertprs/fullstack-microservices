@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import Router from "next/router";
 import axios from "axios";
 
-const useRequest = ({ method, url, body }) => {
+const useRequest = ({ method, url, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
   const doRequest = async () => {
     try {
       const response = await axios[method](url, body);
-      Router.push("/");
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
       return response.data;
     } catch (error) {
       setErrors(

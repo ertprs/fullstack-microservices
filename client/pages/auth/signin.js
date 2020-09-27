@@ -8,7 +8,8 @@ const signup = ({ currentUser }) => {
   const { doRequest, errors, defaultErrors } = useRequest({
     method: "post",
     url: "/api/users/signin",
-    body: { email, password }
+    body: { email, password },
+    onSuccess: () => Router.push("/")
   });
   return (
     <div className="container">
