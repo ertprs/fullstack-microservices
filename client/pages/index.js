@@ -1,5 +1,3 @@
-import withAuth from "../components/withAuth";
-
 const index = ({ currentUser, name }) => {
   return (
     <div>
@@ -13,4 +11,8 @@ const index = ({ currentUser, name }) => {
   );
 };
 
-export default withAuth(index);
+index.getInitialProps = async (context, client, currentUser) => {
+  return {};
+};
+
+export default index;
