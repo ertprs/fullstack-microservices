@@ -7,6 +7,7 @@ route.get(
   "/api/tickets",
   async (req: Request, res: Response): Promise<void> => {
     const tickets = await Ticket.find({});
+    console.log(tickets);
     res.send(tickets);
   }
 );

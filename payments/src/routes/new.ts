@@ -36,7 +36,7 @@ route.post(
     }
     const { id } = await stripe.charges.create({
       amount: order.price * 100,
-      currency: "ksh",
+      currency: "kes",
       source: token
     });
     const payment = Payment.build({ orderId: order.id, stripeId: id });
@@ -49,4 +49,5 @@ route.post(
     res.status(201).send(payment);
   }
 );
+
 export { route as newRoute };

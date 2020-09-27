@@ -17,11 +17,13 @@ app.use(
     sameSite: true
   })
 );
+
 app.use(newRoute);
 // NOT FOUND ROUTE
 app.all(
   "*",
   async (): Promise<void> => {
+    console.log("reached not found");
     throw new NotFound();
   }
 );

@@ -13,7 +13,17 @@ const Header = ({ currentUser }) => {
       <div className="d-flex justify-content-end">
         <ul className="nav d-flex align-items-center">
           {currentUser ? (
-            <span>
+            <span className="nav d-flex align-items-center">
+              <li className="nav-item">
+                <Link href="/tickets/new">
+                  <a className="nav-link">New Ticket</a>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link href="/orders">
+                  <a className="nav-link">My Orders</a>
+                </Link>
+              </li>
               <li
                 className="nav-item"
                 onClick={async () => {

@@ -29,6 +29,8 @@ route.post(
   validateRequest,
   async (req: Request, res: Response): Promise<void> => {
     const { ticketId } = req.body;
+    console.log(ticketId);
+    console.log(await Ticket.find({}));
     const ticket = await Ticket.findById(ticketId);
     if (!ticket) {
       throw new NotFound();
