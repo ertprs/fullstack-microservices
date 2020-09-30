@@ -8,6 +8,7 @@ import { natsWrapper } from "./NatsWrapper";
 
 const start = async (): Promise<void> => {
   try {
+    console.log("starting....");
     if (!process.env.JWT_KEY || !process.env.MONGO_URI) {
       throw new Error("JWT_KEY MUST BE PROVIDED");
     }
