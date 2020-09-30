@@ -1,6 +1,7 @@
 import React from "react";
 
 const order = ({ orders }) => {
+  console.log(orders);
   return (
     <div>
       <ul>
