@@ -1,7 +1,6 @@
 import React from "react";
 
 const order = ({ orders }) => {
-  console.log(orders);
   return (
     <div>
       <ul>
@@ -17,9 +16,9 @@ const order = ({ orders }) => {
 };
 
 order.getInitialProps = async (ctx, client) => {
-  const orders = await client.get("/api/orders");
+  const res = await client.get("/api/orders");
 
-  return { orders };
+  return { orders: res.data };
 };
 
 export default order;
