@@ -3,6 +3,7 @@ import React from "react";
 const order = ({ orders }) => {
   return (
     <div>
+      <h1>Orders</h1>
       <ul>
         {orders.length !== 0 &&
           orders.map(order => {
